@@ -31,9 +31,13 @@ fi
 
 sudo sysctl -w vm.max_map_count=262144
 
+RERUN_OPTIONS="-svx --last-failed --junitxml=~/testresults/results.xml --html=~/testresults/results.html --self-contained-html"
+
 set -x
 if [ -n "$MARKERS" ]; then
-  $PYTEST_PATH -m "$MARKERS" $PYTEST_OPTIONS $TESTS
+    $PYTEST_PATH -m "$MARKERS" $PYTEST_OPTIONS $TESTS || \
+        $PYTEST_PATH -m "$MARKERS" $RERUN_OPTIONS $TESTS
 else
-    $PYTEST_PATH $PYTEST_OPTIONS $TESTS
+    $PYTEST_PATH $PYTEST_OPTIONS $TESTS || \
+        $PYTEST_PATH $RERUN_OPTIONS $TESTS
 fi
