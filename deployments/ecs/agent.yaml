@@ -5,7 +5,7 @@
 signalFxAccessToken: {"#from": "env:ACCESS_TOKEN"}
 ingestUrl: {"#from": "env:INGEST_URL", optional: true}
 apiUrl: {"#from": "env:API_URL", optional: true}
-
+traceEndpointUrl: "https://ingest.us0.signalfx.com/v2/trace"
 intervalSeconds: {"#from": "env:INTERVAL_SECONDS", default: 60}
 
 logging:
