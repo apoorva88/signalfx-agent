@@ -49,6 +49,18 @@ monitors:
   - type: docker-container-stats
     labelsToDimensions:
       <<: *labelMap
+  - type: signalfx-forwarder
+    listenAddress: 0.0.0.0:9080
+    # Used to add a tag to spans missing it
+    #defaultSpanTags:
+     #environment: dev
+    # Used to add and override a tag on a span
+    extraSpanTags:
+     environment: test
+
+# Required: What format to send data in
+writer:
+  traceExportFormat: sapm
 
     # You can set this envvar in your task definition to provide extra monitor
     # configuration to monitor applications running as ECS tasks.  You should
