@@ -6,16 +6,10 @@ signalFxAccessToken: {"#from": "env:ACCESS_TOKEN"}
 ingestUrl: {"#from": "env:INGEST_URL", optional: true}
 apiUrl: {"#from": "env:API_URL", optional: true}
 
-intervalSeconds: {"#from": "env:INTERVAL_SECONDS", default: 10}
+intervalSeconds: {"#from": "env:INTERVAL_SECONDS", default: 60}
 
 logging:
   level: {"#from": "env:LOG_LEVEL", default: "info"}
-
-etcPath: /hostfs/etc
-procPath: /hostfs/proc
-runPath: /hostfs/run
-varPath: /hostfs/var
-sysPath: /hostfs/sys
 
 # observers are what discover running services in the environment
 observers:
@@ -35,20 +29,34 @@ observers:
       com.amazonaws.ecs.task-definition-version: ecs_task_version
 
 monitors:
-  - type: cpu
-  - type: filesystems
+  - type: collectd/cpu
+  - type: collectd/cpufreq
+  - type: collectd/df
     hostFSPath: /hostfs
-  - type: disk-io
-  - type: net-io
-  - type: load
-  - type: memory
+  - type: collectd/disk
+  - type: collectd/interface
+  - type: collectd/load
+  - type: collectd/memory
+  - type: collectd/protocols
+  - type: collectd/signalfx-metadata
   - type: host-metadata
-  - type: processlist
-  - type: vmem
+    etcPath: /hostfs/etc
+  - type: collectd/uptime
+  - type: collectd/vmem
+  - type: collectd/genericjmx
 
   - type: docker-container-stats
     labelsToDimensions:
       <<: *labelMap
+     # If using SignalFx auto instrumentation with default settings
+  - type: signalfx-forwarder
+    listenAddress: 0.0.0.0:9080
+    # Used to add a tag to spans missing it
+    defaultSpanTags:
+     environment: test
+    # Used to add and override a tag on a span
+    #extraSpanTags:
+     #environment: dev  
 
     # You can set this envvar in your task definition to provide extra monitor
     # configuration to monitor applications running as ECS tasks.  You should
@@ -57,7 +65,9 @@ monitors:
   - {"#from": "env:EXTRA_MONITOR_CONFIG", default: [], flatten: true}
 
 metricsToExclude:
+  - {"#from": "/lib/whitelist.json", flatten: true}
   - {"#from": "env:METRICS_TO_EXCLUDE", default: [], flatten: true}
+
 
 # This allows any config above to be completely overridden.  CONFIG_OVERRIDE
 # must be given as a YAML/JSON object.
