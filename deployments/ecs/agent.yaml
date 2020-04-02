@@ -45,6 +45,7 @@ monitors:
   - type: host-metadata
   - type: processlist
   - type: vmem
+
   - type: docker-container-stats
     labelsToDimensions:
       <<: *labelMap
