@@ -65,7 +65,6 @@ monitors:
   - {"#from": "env:EXTRA_MONITOR_CONFIG", default: [], flatten: true}
 
 metricsToExclude:
-  - {"#from": "/lib/whitelist.json", flatten: true}
   - {"#from": "env:METRICS_TO_EXCLUDE", default: [], flatten: true}
 
 
