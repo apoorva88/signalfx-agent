@@ -59,8 +59,8 @@ monitors:
      environment: test
 
 # Required: What format to send data in
-writer:
-  traceExportFormat: sapm
+writer: 
+  - traceExportFormat: sapm
 
     # You can set this envvar in your task definition to provide extra monitor
     # configuration to monitor applications running as ECS tasks.  You should
