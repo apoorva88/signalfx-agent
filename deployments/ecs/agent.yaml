@@ -53,7 +53,7 @@ monitors:
     listenAddress: 0.0.0.0:9080
     # Used to add a tag to spans missing it
     defaultSpanTags:
-     environment: test
+     environment: nonprod
     # Used to add and override a tag on a span
     #extraSpanTags:
      #environment: dev  
